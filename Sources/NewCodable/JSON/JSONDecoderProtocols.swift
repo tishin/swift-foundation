@@ -48,9 +48,9 @@ public protocol JSONFieldDecoder: CommonFieldDecoder & ~Escapable {
 }
 
 public protocol JSONDictionaryDecoder: CommonStructDecoder, CommonDictionaryDecoder & ~Escapable where
-    FieldDecoder: JSONFieldDecoder & ~Escapable,
-    KeyDecoder: CommonDecoder & ~Escapable,
-    ValueDecoder: JSONDecoderProtocol & ~Escapable
+    FieldDecoder: JSONFieldDecoder,
+    KeyDecoder: CommonDecoder,
+    ValueDecoder: JSONDecoderProtocol
 {
     @_lifetime(self: copy self)
     mutating func decodeExpectedOrderField(required: Bool, matchingClosure: (UTF8Span) -> Bool, optimizedSafeStringKey: JSONSafeStringKey?, andValue valueDecoderClosure: (inout ValueDecoder) throws(CodingError.Decoding) -> Void) throws(CodingError.Decoding) -> Bool
@@ -104,7 +104,7 @@ extension JSONDictionaryDecoder where Self: ~Escapable {
     public var sizeHint: Int? { nil }
 }
 
-public protocol JSONArrayDecoder: CommonArrayDecoder & ~Escapable where ElementDecoder: JSONDecoderProtocol & ~Escapable {    
+public protocol JSONArrayDecoder: CommonArrayDecoder & ~Escapable where ElementDecoder: JSONDecoderProtocol {    
     @_lifetime(self: copy self)
     mutating func decodeNext<T: ~Copyable>(_ closure: (inout ElementDecoder) throws(CodingError.Decoding) -> T) throws(CodingError.Decoding) -> T?
     
@@ -149,9 +149,9 @@ extension JSONArrayDecoder where Self: ~Escapable {
 }
 
 public protocol JSONDecoderProtocol: CommonDecoder & ~Escapable where
-    StructDecoder: JSONDictionaryDecoder & ~Escapable,
-    ArrayDecoder: JSONArrayDecoder & ~Escapable,
-    FieldDecoder: JSONFieldDecoder & ~Escapable
+    StructDecoder: JSONDictionaryDecoder,
+    ArrayDecoder: JSONArrayDecoder,
+    FieldDecoder: JSONFieldDecoder
 {    
     // MARK: - Structural Decoding
     
